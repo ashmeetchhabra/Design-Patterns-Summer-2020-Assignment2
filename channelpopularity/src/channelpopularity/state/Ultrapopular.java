@@ -1,5 +1,6 @@
 package channelpopularity.state;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import channelpopularity.context.ContextI;
@@ -13,15 +14,17 @@ public class Ultrapopular extends AbstractState{
 	}
 
 	@Override
-	public void addRequest(HashMap<String, ?> str) {
+	public void addRequest(HashMap<String, ?> str) throws IOException {
 		int lengthOfAdd = (int) str.get(OperationArgs.LEN.toString());
 		
-		if(lengthOfAdd>100000 && lengthOfAdd<=Integer.MAX_VALUE) {
-			System.out.println(StateName.ULTRA_POPULAR.name()+OperationArgs.__AD_REQUEST+"::"+OperationArgs.APPROVED);
-			
+		if(lengthOfAdd>1 && lengthOfAdd<=40) {
+			results.writeToFile(StateName.ULTRA_POPULAR.name()+OperationArgs.__AD_REQUEST+"::"+OperationArgs.APPROVED+"\n");
+			results.printToConsole(StateName.ULTRA_POPULAR.name()+OperationArgs.__AD_REQUEST+"::"+OperationArgs.APPROVED);
 		}
-		else
-			System.out.println(StateName.ULTRA_POPULAR.name()+OperationArgs.__AD_REQUEST+"::"+OperationArgs.REJECTED);
+		else {
+			results.writeToFile(StateName.ULTRA_POPULAR.name()+OperationArgs.__AD_REQUEST+"::"+OperationArgs.REJECTED+"\n");
+			results.printToConsole(StateName.ULTRA_POPULAR.name()+OperationArgs.__AD_REQUEST+"::"+OperationArgs.REJECTED);
+		}
 		
 	}
 

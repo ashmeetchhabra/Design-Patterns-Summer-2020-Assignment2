@@ -1,5 +1,6 @@
 package channelpopularity.state;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,21 +51,23 @@ public abstract class AbstractState implements StateI {
 		throw new RuntimeException("Invalid State");
 	}
 
-	public void addVideo(HashMap<String, ?> str) {
+	public void addVideo(HashMap<String, ?> str) throws IOException {
 		con.getVideos().put((String) str.get(OperationArgs.VIDEONAME.toString()), new HashMap<String, Integer>());
 		calculatePopularityScore();
-		StateName s=this.changeState();
-		System.out.println(s+OperationArgs.__VIDEO_ADDED.name()+"::"+str.get(OperationArgs.VIDEONAME.name()));
+		con.setCurrentState(this.changeState());
+		results.writeToFile(st+OperationArgs.__VIDEO_ADDED.name()+"::"+str.get(OperationArgs.VIDEONAME.name())+"\n");
+		results.printToConsole(st+OperationArgs.__VIDEO_ADDED.name()+"::"+str.get(OperationArgs.VIDEONAME.name()));
 	}
 
-	public void removeVideo(HashMap<String, ?> str) {
+	public void removeVideo(HashMap<String, ?> str) throws IOException {
 		con.getVideos().remove((String) str.get(OperationArgs.VIDEONAME.toString()));
 		calculatePopularityScore();
-		StateName s=this.changeState();
-		System.out.println(s+OperationArgs.__VIDEO_REMOVED.name()+"::"+str.get(OperationArgs.VIDEONAME.name()));
+		con.setCurrentState(this.changeState());
+		results.writeToFile(st+OperationArgs.__VIDEO_REMOVED.name()+"::"+str.get(OperationArgs.VIDEONAME.name())+"\n");
+		results.printToConsole(st+OperationArgs.__VIDEO_REMOVED.name()+"::"+str.get(OperationArgs.VIDEONAME.name()));
 	}
 
-	public void metrics(HashMap<String, ?> str) {
+	public void metrics(HashMap<String, ?> str) throws IOException {
 		int views = (int) str.get(OperationArgs.VIEWS.toString());
 		int likes = (int) str.get(OperationArgs.LIKES.toString());
 		int dislikes = (int) str.get(OperationArgs.DISLIKES.toString());
@@ -75,8 +78,10 @@ public abstract class AbstractState implements StateI {
 		metrics.put(OperationArgs.DISLIKES.name(), dislikes + metrics.getOrDefault(OperationArgs.DISLIKES.name(), 0));
 		
 		calculatePopularityScore();
-		StateName s=this.changeState();
-		System.out.println(s+OperationArgs.__POPULARITY_SCORE_UPDATE.name()+"::"+con.getPopularityScore());
+		con.setCurrentState(this.changeState());
+		results.writeToFile(st+OperationArgs.__POPULARITY_SCORE_UPDATE.name()+"::"+(int)con.getPopularityScore()+"\n");
+		results.printToConsole(st+OperationArgs.__POPULARITY_SCORE_UPDATE.name()+"::"+(int)con.getPopularityScore());
 	}
+	
 
 }

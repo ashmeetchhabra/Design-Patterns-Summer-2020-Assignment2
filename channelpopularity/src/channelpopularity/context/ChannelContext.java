@@ -1,5 +1,6 @@
 package channelpopularity.context;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,19 +21,19 @@ public class ChannelContext implements ContextI {
 		return currentState;
 	}
 
+	@Override
 	public void setCurrentState(StateName name) {
 		this.currentState = availableStates.get(name);
 	}
 
-	public ChannelContext(SimpleStateFactoryI stateFactoryIn, StateName[] stateNames, Results res) {// results
-//    	StateName.values();
+	public ChannelContext(SimpleStateFactoryI stateFactoryIn, StateName[] stateNames, Results res) {
 		for (StateName state : stateNames)
 			availableStates.put(state, stateFactoryIn.create(state, res, this));
 		setCurrentState(StateName.UNPOPULAR);
 	}
 
 	@Override
-	public void operationHandler(Operation op, HashMap<String, ?> str) {
+	public void operationHandler(Operation op, HashMap<String, ?> str) throws IOException {
 
 		switch (op) {
 		case ADD_VIDEO:
@@ -61,7 +62,6 @@ public class ChannelContext implements ContextI {
 
 	@Override
 	public void setPopularityScore(double score) {
-		System.out.print(" PS:"+score+" ");
 		avgPopularityScore=score;
 		
 	}

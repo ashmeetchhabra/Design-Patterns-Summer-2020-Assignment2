@@ -1,5 +1,7 @@
 package channelpopularity.driver;
 
+import java.io.IOException;
+import java.nio.file.InvalidPathException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,7 +23,7 @@ import channelpopularity.util.Results;
 public class Driver {
 	private static final int REQUIRED_NUMBER_OF_CMDLINE_ARGS = 2;
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 
 		/*
 		 * As the build.xml specifies the arguments as input,output or metrics, in case
@@ -37,14 +39,20 @@ public class Driver {
 		// Initializations
 		LineHandler lh = new LineHandler();
 		String line;
-		FileProcessor fp = new FileProcessor(args[0]);
-		ChannelContext cc = new ChannelContext(new SimpleStateFactory(), StateName.values(), new Results(args[1]));
-
-		while ((line = fp.poll()) != null) {
-			HashMap<String, ?> hm = lh.lineProcessor(line);
-			Operation op = lh.getOperation(line);
-			cc.operationHandler(op, hm);
+		FileProcessor fp;
+		Results res = null ;
+		try {
+			res = new Results(args[1]);
+			fp = new FileProcessor(args[0]);
+			ChannelContext cc = new ChannelContext(new SimpleStateFactory(), StateName.values(), res);
+			while ((line = fp.poll()) != null) {
+				HashMap<String, ?> hm = lh.lineProcessor(line);
+				Operation op = lh.getOperation(line);
+				cc.operationHandler(op, hm);
+			}
+			res.closeFile();
+		} catch (InvalidPathException | SecurityException | IOException e) {
+			e.printStackTrace();
 		}
-
 	}
 }

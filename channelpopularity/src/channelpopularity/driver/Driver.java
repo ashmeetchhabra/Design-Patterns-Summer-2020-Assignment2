@@ -1,7 +1,18 @@
 package channelpopularity.driver;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.naming.spi.StateFactory;
+
+import channelpopularity.context.ChannelContext;
+import channelpopularity.operation.Operation;
+import channelpopularity.state.StateName;
+import channelpopularity.state.factory.SimpleStateFactory;
 import channelpopularity.util.FileProcessor;
 import channelpopularity.util.LineHandler;
+import channelpopularity.util.Results;
 
 /**
  * @author John Doe
@@ -22,16 +33,17 @@ public class Driver {
 					REQUIRED_NUMBER_OF_CMDLINE_ARGS);
 			System.exit(0);
 		}
-		System.out.println("Hello World! Lets get started with the assignment");
 
 		// Initializations
 		LineHandler lh = new LineHandler();
 		String line;
 		FileProcessor fp = new FileProcessor(args[0]);
+		ChannelContext cc = new ChannelContext(new SimpleStateFactory(), StateName.values(), new Results(args[1]));
 
 		while ((line = fp.poll()) != null) {
-			lh.lineProcessor(line);
-
+			HashMap<String, ?> hm = lh.lineProcessor(line);
+			Operation op = lh.getOperation(line);
+			cc.operationHandler(op, hm);
 		}
 
 	}

@@ -1,5 +1,6 @@
 package channelpopularity.state.factory;
 
+import channelpopularity.context.ContextI;
 import channelpopularity.state.Highlypopular;
 import channelpopularity.state.MildlyPopular;
 import channelpopularity.state.StateI;
@@ -10,23 +11,17 @@ import channelpopularity.util.Results;
 
 public class SimpleStateFactory implements SimpleStateFactoryI {
 
-	private final Results results;
-
-	public SimpleStateFactory(Results results) {
-		this.results = results;
-	}
-
 	@Override
-	public StateI create(StateName stateName) {
+	public StateI create(StateName stateName, Results results, ContextI context) {
 		switch (stateName) {
 		case UNPOPULAR:
-			return new Unpopular(results);
+			return new Unpopular(results, context, stateName);
 		case MILDLY_POPULAR:
-			return new MildlyPopular(results);
+			return new MildlyPopular(results, context, stateName);
 		case HIGHLY_POPULAR:
-			return new Highlypopular(results);
+			return new Highlypopular(results, context, stateName);
 		case ULTRA_POPULAR:
-			return new Ultrapopular(results);
+			return new Ultrapopular(results, context, stateName);
 		default:
 			return null;
 		}

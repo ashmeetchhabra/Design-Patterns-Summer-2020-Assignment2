@@ -52,6 +52,8 @@ public abstract class AbstractState implements StateI {
 	}
 
 	public void addVideo(HashMap<String, ?> str) throws IOException {
+		if(con.getVideos().containsKey((String) str.get(OperationArgs.VIDEONAME.toString())))
+			throw new RuntimeException("Invalid Input File: "+(String) str.get(OperationArgs.VIDEONAME.toString())+" Already Added");
 		con.getVideos().put((String) str.get(OperationArgs.VIDEONAME.toString()), new HashMap<String, Integer>());
 		calculatePopularityScore();
 		con.setCurrentState(this.changeState());
@@ -60,6 +62,8 @@ public abstract class AbstractState implements StateI {
 	}
 
 	public void removeVideo(HashMap<String, ?> str) throws IOException {
+		if(!con.getVideos().containsKey((String) str.get(OperationArgs.VIDEONAME.toString())))
+			throw new RuntimeException("Invalid Input File: "+(String) str.get(OperationArgs.VIDEONAME.toString())+" does not present");
 		con.getVideos().remove((String) str.get(OperationArgs.VIDEONAME.toString()));
 		calculatePopularityScore();
 		con.setCurrentState(this.changeState());
@@ -71,8 +75,17 @@ public abstract class AbstractState implements StateI {
 		int views = (int) str.get(OperationArgs.VIEWS.toString());
 		int likes = (int) str.get(OperationArgs.LIKES.toString());
 		int dislikes = (int) str.get(OperationArgs.DISLIKES.toString());
+		
+		//TODO: 
+//		if(likes+dislikes<0)
+//			throw new RuntimeException("Invalid Input File: Negative Total Views and Dislikes for "+str.get(OperationArgs.VIDEONAME.name()));
+		
 
+		if(views<0)
+			throw new RuntimeException("Invalid Input File: Negative Views for "+str.get(OperationArgs.VIDEONAME.name()));
 		Map<String, Integer> metrics = con.getVideos().get(str.get(OperationArgs.VIDEONAME.name()));
+		if(!con.getVideos().containsKey((String) str.get(OperationArgs.VIDEONAME.toString())))
+			throw new RuntimeException("Invalid Input File: "+(String) str.get(OperationArgs.VIDEONAME.toString())+" does not present");
 		metrics.put(OperationArgs.VIEWS.name(), views + metrics.getOrDefault(OperationArgs.VIEWS.name(), 0));
 		metrics.put(OperationArgs.LIKES.name(), likes + metrics.getOrDefault(OperationArgs.LIKES.name(), 0));
 		metrics.put(OperationArgs.DISLIKES.name(), dislikes + metrics.getOrDefault(OperationArgs.DISLIKES.name(), 0));

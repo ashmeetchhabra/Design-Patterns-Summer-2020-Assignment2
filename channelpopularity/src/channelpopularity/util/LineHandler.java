@@ -6,8 +6,13 @@ import channelpopularity.operation.Operation;
 import channelpopularity.operation.OperationArgs;
 
 public class LineHandler {
-	public HashMap<String, ?> lineProcessor(String line) {
+	public HashMap<String, ?> lineProcessor(String line)  {
+//		if(isValidInputLine(line)) {
 
+		boolean isValidInputLine = true;
+		if(!line.contains("::"))
+			isValidInputLine=false;
+		
 		String s[] = line.split("::");
 //		System.out.println(s[0] + "     " + s[1]);
 		if (s[0].startsWith(Operation.ADD_VIDEO.toString())) {
@@ -24,9 +29,14 @@ public class LineHandler {
 		}
 		if (s[0].startsWith(Operation.METRICS.toString())) {
 			HashMap<String, Object> metricsHashMap = new HashMap<String, Object>();
+			if(!s[0].contains("__"))
+				isValidInputLine=false;
 			String preOp[] = s[0].split("__");
 			String videoName=preOp[1];
 
+			if(!s[1].startsWith("[")&&!s[1].endsWith("]")&&!s[1].contains(","))
+				isValidInputLine=false;
+				
 			String m[] = s[1].substring(1, s[1].length() - 1).split(",");
 			for (int i = 0; i < m.length; i++) {
 				String n[] = m[i].split("=");
@@ -48,9 +58,18 @@ public class LineHandler {
 		// line starts with add_videos.. arrar of enum
 
 //		}
-		return null;
-
+		throw new RuntimeException("Invalid Input Line: "+line);
+		
 	}
+	
+//	boolean isValidInputLine(String line) {
+//		if(line.startsWith(Operation.ADD_VIDEO.name()))
+//			boolean h =line.matches(regex);
+//		
+//		
+//		return false;
+//		
+//	}
 	
 	public Operation getOperation(String line) {
 		if (line.startsWith(Operation.ADD_VIDEO.toString())) 

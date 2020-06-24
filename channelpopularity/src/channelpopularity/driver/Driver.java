@@ -1,12 +1,9 @@
 package channelpopularity.driver;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.naming.spi.StateFactory;
 
 import channelpopularity.context.ChannelContext;
 import channelpopularity.operation.Operation;
@@ -40,19 +37,33 @@ public class Driver {
 		LineHandler lh = new LineHandler();
 		String line;
 		FileProcessor fp;
-		Results res = null ;
+		Results res = null;
+		boolean checkForEmptyInputFile = true;
 		try {
 			res = new Results(args[1]);
 			fp = new FileProcessor(args[0]);
 			ChannelContext cc = new ChannelContext(new SimpleStateFactory(), StateName.values(), res);
 			while ((line = fp.poll()) != null) {
+				checkForEmptyInputFile = false;
 				HashMap<String, ?> hm = lh.lineProcessor(line);
 				Operation op = lh.getOperation(line);
 				cc.operationHandler(op, hm);
 			}
 			res.closeFile();
-		} catch (InvalidPathException | SecurityException | IOException e) {
+
+			if (checkForEmptyInputFile)
+				throw new RuntimeException("Empty Input File: " + args[0]);
+
+		} catch (InvalidPathException e) {
 			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (RuntimeException e) {
+			System.err.println(e.getMessage());
 		}
 	}
 }

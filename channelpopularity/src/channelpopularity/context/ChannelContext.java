@@ -32,6 +32,13 @@ public class ChannelContext implements ContextI {
 		setCurrentState(StateName.UNPOPULAR);
 	}
 
+	/**
+	 * Handles the Operations
+	 * 
+	 * @param str: HashMap of videonames and parameters(metrics and adv length)
+	 * @param op:  Operations enum
+	 *
+	 */
 	@Override
 	public void operationHandler(Operation op, HashMap<String, ?> str) throws IOException {
 
@@ -53,7 +60,6 @@ public class ChannelContext implements ContextI {
 		}
 	}
 
-
 	@Override
 	public Map<String, HashMap<String, Integer>> getVideos() {
 		return videoMap;
@@ -62,8 +68,8 @@ public class ChannelContext implements ContextI {
 
 	@Override
 	public void setPopularityScore(double score) {
-		avgPopularityScore=score;
-		
+		avgPopularityScore = score;
+
 	}
 
 	@Override

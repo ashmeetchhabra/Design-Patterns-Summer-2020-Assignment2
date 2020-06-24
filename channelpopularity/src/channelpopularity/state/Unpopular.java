@@ -2,7 +2,6 @@ package channelpopularity.state;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 import channelpopularity.context.ContextI;
 import channelpopularity.operation.OperationArgs;
@@ -14,6 +13,12 @@ public class Unpopular extends AbstractState {
 		super(results, c, sn);
 	}
 
+	/**
+	 * Categorize the advertisement according to the length and the states
+	 * 
+	 * @param str: HashMap of videonames and parameters(metrics and adv length)
+	 *
+	 */
 	@Override
 	public void addRequest(HashMap<String, ?> str) throws IOException {
 		if (!con.getVideos().containsKey((String) str.get(OperationArgs.VIDEONAME.toString())))

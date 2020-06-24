@@ -9,12 +9,14 @@ import channelpopularity.state.StateName;
 
 public interface ContextI {
 
-	void operationHandler(Operation op,HashMap<String, ?> str) throws IOException;
-	
+	void operationHandler(Operation op, HashMap<String, ?> str) throws IOException;
+
 	Map<String, HashMap<String, Integer>> getVideos();
-	
+
 	void setPopularityScore(double score);
+
 	double getPopularityScore();
+
 	void setCurrentState(StateName name);
 
 }

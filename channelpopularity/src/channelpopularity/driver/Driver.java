@@ -20,6 +20,10 @@ import channelpopularity.util.Results;
 public class Driver {
 	private static final int REQUIRED_NUMBER_OF_CMDLINE_ARGS = 2;
 
+	/**
+	 * @param args: -Dinput: Path to the Input file. -Doutput: Path to the output
+	 *              file.
+	 */
 	public static void main(String[] args) {
 
 		/*
@@ -61,6 +65,8 @@ public class Driver {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (RuntimeException e) {
 			System.err.println(e.getMessage());

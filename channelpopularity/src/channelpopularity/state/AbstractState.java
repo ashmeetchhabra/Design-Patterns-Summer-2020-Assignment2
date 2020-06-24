@@ -98,21 +98,31 @@ public abstract class AbstractState implements StateI {
 		int views = (int) str.get(OperationArgs.VIEWS.toString());
 		int likes = (int) str.get(OperationArgs.LIKES.toString());
 		int dislikes = (int) str.get(OperationArgs.DISLIKES.toString());
-
-		// TODO:
-//		if(likes+dislikes<0)
-//			throw new RuntimeException("Invalid Input File: Negative Total Views and Dislikes for "+str.get(OperationArgs.VIDEONAME.name()));
+		int totalLikes, totalDislikes;
 
 		if (views < 0)
 			throw new RuntimeException(
 					"Invalid Input File: Negative Views for " + str.get(OperationArgs.VIDEONAME.name()));
+
 		Map<String, Integer> metrics = con.getVideos().get(str.get(OperationArgs.VIDEONAME.name()));
+
+		totalLikes = likes + metrics.getOrDefault(OperationArgs.LIKES.name(), 0);
+		totalDislikes = dislikes + metrics.getOrDefault(OperationArgs.DISLIKES.name(), 0);
+
+		if (totalLikes < 0)
+			throw new RuntimeException(
+					"Invalid Input File: Negative Total Likes for " + str.get(OperationArgs.VIDEONAME.name()));
+
+		if (totalDislikes < 0)
+			throw new RuntimeException(
+					"Invalid Input File: Negative Total Dislikes for " + str.get(OperationArgs.VIDEONAME.name()));
+
 		if (!con.getVideos().containsKey((String) str.get(OperationArgs.VIDEONAME.toString())))
 			throw new RuntimeException("Invalid Input File: " + (String) str.get(OperationArgs.VIDEONAME.toString())
 					+ " does not present");
 		metrics.put(OperationArgs.VIEWS.name(), views + metrics.getOrDefault(OperationArgs.VIEWS.name(), 0));
-		metrics.put(OperationArgs.LIKES.name(), likes + metrics.getOrDefault(OperationArgs.LIKES.name(), 0));
-		metrics.put(OperationArgs.DISLIKES.name(), dislikes + metrics.getOrDefault(OperationArgs.DISLIKES.name(), 0));
+		metrics.put(OperationArgs.LIKES.name(), totalLikes);
+		metrics.put(OperationArgs.DISLIKES.name(), dislikes);
 
 		calculatePopularityScore();
 		con.setCurrentState(this.changeState());

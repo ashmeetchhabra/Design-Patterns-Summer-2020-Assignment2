@@ -4,9 +4,9 @@
 */bin/
 **/bin/
 
-/.project
-/.classpath
-/input.txt
-/output.txt
+.project
+.classpath
+input.txt
+output.txt
 */input.txt
 */output.txt

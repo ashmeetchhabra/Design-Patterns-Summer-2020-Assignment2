@@ -66,20 +66,21 @@ Enums:
 	b. Then the popularity score is calculated of the video according to the given metrics.
 	c. Metrics of the video contains numOfViews, numOfLikes, numOfDislikes.
 	d. Formula for calculating Popularity score is: (#Views + 2 * (#Likes - #Dislikes))/numOfVideos
-	e. The catergorization of states according to the popularity score is as follows:
+	e. After Calculating the Average Popularity score the decimal places are truncated before printing   them to a file and to the console.
+	f. The catergorization of states according to the popularity score is as follows:
 		i. UNPOPULAR - range [0, 1000]
 		ii. MILDLY_POPULAR -range (1000, 10000]
 		iii. HIGHLY_POPULAR -range (10000, 100000]
 		iv. ULTRA_POPULAR -range (100000, INT_MAX]
-	f. UNPOPULAR is the initial state.
-	g. Then there will be addRequest with the length of the advertisement.
-	h. The Advertisement is approved or Rejected according to the states and the length of Add.
-	i. Categorization is as follows:
+	g. UNPOPULAR is the initial state.
+	h. Then there will be addRequest with the length of the advertisement.
+	i. The Advertisement is approved or Rejected according to the states and the length of Add.
+	j. Categorization is as follows:
 		i. state=UNPOPULAR, advertisements of length in range (1,10]
 		ii. state=MILDLY_POPULAR, advertisements of length in range (1, 20]
 		iii. state=HIGHLY_POPULAR, advertisements of length in range (1, 30]
 		iv. state=ULTRA_POPULAR, advertisements of length in range (1, 40]
-	j. At last the video is removed from the Channel.
+	k. At last the video is removed from the Channel.
 	
 
 ## Academic Honesty statement:

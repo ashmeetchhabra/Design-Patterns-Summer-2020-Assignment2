@@ -1,1 +1,12 @@
 /bin/
+./channelpopularity/src/BUILD/
+/.vs/
+
+.project
+.classpath
+input.txt
+output.txt
+*/input.txt
+*/output.txt
+*/bin/
+**/bin/

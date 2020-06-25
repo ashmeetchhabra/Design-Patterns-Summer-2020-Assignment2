@@ -3,6 +3,8 @@
 /.vs/
 ./.project
 ./.classpath
+./input.txt
+./output.txt
 */input.txt
 */output.txt
 */bin/
